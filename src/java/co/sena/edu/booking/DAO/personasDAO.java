@@ -9,6 +9,8 @@
 package co.sena.edu.booking.DAO;
 
 import cao.sena.edu.booking.util.reserConex;
+import co.sena.edu.booking.DTO.ciudadesDTO;
+import co.sena.edu.booking.DTO.listarPerDTO;
 import co.sena.edu.booking.DTO.nacionalidadesDTO;
 import co.sena.edu.booking.DTO.personasDTO;
 import java.sql.Connection;
@@ -390,38 +392,52 @@ public String EnviarCorreo(String Correo){
             }
        return clave;  
 }  
-public List<personasDTO> contarPersonas(String pais, String nombres) {
-        ArrayList<personasDTO> productos = new ArrayList();
-        try {
-            StringBuilder sb = new StringBuilder("select p.nombres as Nombre, p.apellidos as Apellido, "
-                    + "c.nacionalidad as nacionalidad "
-                    + "from personas as p join "
-                    + "nacionalidades as c on"
-                    + " p.idNacionalidad = c.idNacionalidad ");
 
-            if (pais != null) {
-                sb.append("AND p.nombres LIKE '").append(pais).append("%'");
+public List<listarPerDTO> filtroPersonas(String nacionalidad, String nombres, String ciudades ) throws SQLException {
+        ArrayList<listarPerDTO> filtroPersonas = new ArrayList();
+
+        try {
+         StringBuilder sb = new StringBuilder("select p.nombres, p.apellidos, p.correoElectronico, a.Ciudad, c.nacionalidad,c.idioma "
+                    + "from personas p inner join "
+                    + "nacionalidades c on p.idNacionalidad = c.idNacionalidad "
+                    + "inner join ciudades a on p.idCiudad = a.idCiudad ");
+
+            if (nacionalidad != null) {
+                sb.append("AND c.nacionalidad LIKE '").append(nacionalidad).append("%'");
             }
             if (nombres!= null) {
-                sb.append("AND c.nacionalidad LIKE '").append(nombres).append("%'");
+                sb.append("AND p.nombres LIKE '").append(nombres).append("%'");
+            }
+            
+            if (ciudades != null) {
+                sb.append("AND a.Ciudad LIKE '").append(ciudades).append("%'");
+            }
+         
+         
+         
+         pstmt = cnn.prepareStatement(sb.toString());
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                listarPerDTO Rdao = new listarPerDTO();
+                
+                
+                Rdao.setNombres(rs.getString("nombres"));
+                Rdao.setApellidos(rs.getString("apellidos")); 
+                Rdao.setCorreoElectronico(rs.getString("correoElectronico"));
+                Rdao.setCiudad(rs.getString("Ciudad"));
+                Rdao.setNacionalidad(rs.getString("nacionalidad"));
+                Rdao.setIdioma(rs.getString("idioma"));
+                filtroPersonas.add(Rdao);
+
             }
 
-            sb.append("order by nacionalidad desc limit 0,10");
-            pstmt = cnn.prepareStatement(sb.toString());
-            rs = pstmt.executeQuery();
-            if (rs != null) {
-                while (rs.next()) {
-                    personasDTO producto = new personasDTO();
-                    producto.setNombres(rs.getString("Nombre"));
-                    producto.setApellidos(rs.getString("Apellido"));
-                    producto.setIdCiudad(rs.getInt("nacionalidad"));
-                    productos.add(producto);
-                }
-            }
-        } catch (SQLException ex) {
+        } catch (SQLException slqE) {
+            System.out.println("Ocurrio un error" + slqE.getMessage());
+        } finally {
 
         }
-        return productos;
+        return filtroPersonas;
     }
 
 }

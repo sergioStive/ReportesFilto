@@ -50,7 +50,7 @@
     <li><div align="center"><a href="#" style="text-decoration: none;">Reservas</a> 
     <li><div align="center"><a href="#" style="text-decoration: none;">Rutas</a>
     <li><div align="center"><a href="#" style="text-decoration: none;">Conductores</a> 
-    <li><div align="center"><a href="listarPersonas.jsp" style="text-decoration: none;">Clientes</a>
+    <li><div align="center"><a href="Filtro.jsp" style="text-decoration: none;">Clientes</a>
     <li><div align="center"><a href="ReporteM.jsp" style="text-decoration: none;">Reporte Multicriterio</a> 
     </div>
      </li>
@@ -65,7 +65,7 @@
      ArrayList<personasDTO> misPersonas= new ArrayList();
      int numreg = pers.contarRegistros();
      int numpg = numreg/5;  
-     int pg =0; //pagona a mostrar
+     int pg =0; 
      if(request.getParameter("pg")==null){
      pg=1;
      }else{
@@ -135,7 +135,7 @@
     <%      
        for(int j=0;j<numpg+1;j++){
        %>  
-       <a href="?pg=<%=j+1%>"><%=j+1 %></a>
+       <a href="?pg=<%=j+1%>"><%=j+1%></a>
  <%
      }
  %> 

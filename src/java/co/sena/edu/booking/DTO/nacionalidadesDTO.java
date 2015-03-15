@@ -13,6 +13,7 @@ public class nacionalidadesDTO {
     
     private int idNacionalidad;
     private String nacionalidad;
+    private String idioma;
 
     /**
      * @return the idNacionalidad
@@ -45,6 +46,21 @@ public class nacionalidadesDTO {
     @Override
     public String toString() {
         return "\nidNacionalidad " + this.idNacionalidad
-                + "\nNacionalidad " + this.nacionalidad;
+                + "\nNacionalidad " + this.nacionalidad
+                + "\nidioma" + this.idioma;
+    }
+
+    /**
+     * @return the idioma
+     */
+    public String getIdioma() {
+        return idioma;
+    }
+
+    /**
+     * @param idioma the idioma to set
+     */
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 }

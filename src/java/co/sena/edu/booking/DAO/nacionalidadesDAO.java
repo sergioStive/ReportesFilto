@@ -34,11 +34,11 @@ public nacionalidadesDAO(){
 public String actualizarRegistro( nacionalidadesDTO nacionali) {
 try {
 
-pstmt = cnn.prepareStatement ("UPDATE nacionalidades SET Nacionalidad=? WHERE idNacionalidad=?;");
+pstmt = cnn.prepareStatement ("UPDATE nacionalidades SET Nacionalidad=? , idioma=? WHERE idNacionalidad=?;");
 
 pstmt.setString (1, nacionali.getNacionalidad());
 pstmt.setInt (2,nacionali.getIdNacionalidad());
-
+pstmt.setString(3, nacionali.getIdioma());
 
 nacio = pstmt.executeUpdate();
             if (nacio > 0) {
@@ -58,9 +58,10 @@ public String crearNacionalidad(nacionalidadesDTO newNacionalidad)throws SQLExce
         try {
 
             int resultado = 0;
-            pstmt = cnn.prepareStatement("INSERT INTO nacionalidades VALUES ( ?, ?)");
+            pstmt = cnn.prepareStatement("INSERT INTO nacionalidades VALUES ( ?, ?,?)");
             pstmt.setInt(1, newNacionalidad.getIdNacionalidad());
             pstmt.setString(2, newNacionalidad.getNacionalidad());
+            pstmt.setString(3, newNacionalidad.getIdioma());
            
             resultado = pstmt.executeUpdate();
 
@@ -93,7 +94,7 @@ public String crearNacionalidad(nacionalidadesDTO newNacionalidad)throws SQLExce
         try {
 
 
-            String query = "SELECT  idNacionalidad, nacionalidad"
+            String query = "SELECT  idNacionalidad, nacionalidad,idioma"
                     + " FROM nacionalidades ";
             pstmt= cnn.prepareStatement(query);
             rs = pstmt.executeQuery();
@@ -102,6 +103,7 @@ public String crearNacionalidad(nacionalidadesDTO newNacionalidad)throws SQLExce
                 nacionalidadesDTO newNacionalidad = new nacionalidadesDTO();
                 newNacionalidad.setIdNacionalidad(rs.getInt("id"));
                 newNacionalidad.setNacionalidad(rs.getString("nacionalidad"));
+                newNacionalidad.setIdioma(rs.getString("idioma"));
                 
                 listaNacionalidades.add(newNacionalidad);
             }
@@ -115,7 +117,7 @@ public String crearNacionalidad(nacionalidadesDTO newNacionalidad)throws SQLExce
 }
     public String  ListarUnaNacionalidad (nacionalidadesDTO Rdao) throws SQLException{
            try  {
-               pstmt = cnn.prepareStatement("select idNacionalidad, nacionalidad from nacionalidades where idNacionalidad=?;");
+               pstmt = cnn.prepareStatement("select idNacionalidad,  nacionalidad,idioma from nacionalidades where idNacionalidad=?;");
                pstmt.setInt(1, Rdao.getIdNacionalidad());
                pstmt.executeQuery();
                
@@ -124,6 +126,7 @@ public String crearNacionalidad(nacionalidadesDTO newNacionalidad)throws SQLExce
                while(rs.next()){
                    Rdao.setIdNacionalidad(rs.getInt("idNacionalidad"));
                    Rdao.setNacionalidad(rs.getString("nacionalidad"));
+                   Rdao.setIdioma(rs.getString("idioma"));
                    
                }
            }catch (SQLException ex){
@@ -136,7 +139,7 @@ public List <nacionalidadesDTO> listarNacionalidades () throws SQLException{
     ArrayList <nacionalidadesDTO> listarNacionalidades = new ArrayList ();
     
     try {
-        String query = "select idNacionalidad, nacionalidad from nacionalidades";
+        String query = "select idNacionalidad, nacionalidad,idioma from nacionalidades";
        pstmt = cnn.prepareStatement(query);
        rs = pstmt.executeQuery();
        
@@ -144,6 +147,7 @@ public List <nacionalidadesDTO> listarNacionalidades () throws SQLException{
            nacionalidadesDTO reser = new nacionalidadesDTO();
            reser.setIdNacionalidad(rs.getInt("idNacionalidad"));
            reser.setNacionalidad(rs.getString("nacionalidad"));
+           reser.setIdioma(rs.getString("idioma"));
            listarNacionalidades.add(reser);
                    
        }
